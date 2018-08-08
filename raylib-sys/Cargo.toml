@@ -2,6 +2,7 @@
 name = "raylib-sys"
 version = "0.1.0"
 authors = ["David Cristofaro <david@dtcristo.com>"]
+build = "build.rs"
 
 [dependencies]
 
