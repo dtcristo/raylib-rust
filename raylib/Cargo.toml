@@ -2,6 +2,7 @@
 name = "raylib"
 version = "0.1.0"
 authors = ["David Cristofaro <david@dtcristo.com>"]
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 raylib-sys = { path = "../raylib-sys" }
