@@ -3,8 +3,7 @@ extern crate raylib_sys;
 use raylib_sys::*;
 use std::ffi::CString;
 
-#[test]
-fn raylib_rust_logo() {
+fn main() {
     let screen_width = 800;
     let screen_height = 450;
     let ray_white = Color {
