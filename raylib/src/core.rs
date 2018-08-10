@@ -14,15 +14,15 @@ pub fn close_window() {
 }
 /// Check if window has been initialized successfully
 pub fn is_window_ready() -> bool {
-    unsafe { ffi::IsWindowReady() == ffi::bool__true_ }
+    unsafe { ffi::IsWindowReady() == ffi::bool_::true_ }
 }
 /// Check if KEY_ESCAPE pressed or Close icon pressed
 pub fn window_should_close() -> bool {
-    unsafe { ffi::WindowShouldClose() == ffi::bool__true_ }
+    unsafe { ffi::WindowShouldClose() == ffi::bool_::true_ }
 }
 /// Check if window has been minimized (or lost focus)
 pub fn is_window_minimized() -> bool {
-    unsafe { ffi::IsWindowMinimized() == ffi::bool__true_ }
+    unsafe { ffi::IsWindowMinimized() == ffi::bool_::true_ }
 }
 /// Toggle fullscreen mode (only PLATFORM_DESKTOP)
 pub fn toggle_fullscreen() {
