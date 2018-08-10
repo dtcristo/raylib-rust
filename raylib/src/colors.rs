@@ -162,7 +162,7 @@ pub const BLACK: Color = Color {
     b: 0,
     a: 255,
 };
-/// Transparent
+/// Blank (Transparent)
 pub const BLANK: Color = Color {
     r: 0,
     g: 0,
