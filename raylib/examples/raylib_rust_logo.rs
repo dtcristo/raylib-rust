@@ -1,54 +1,21 @@
 extern crate raylib;
-extern crate raylib_sys;
 
-use std::ffi::CString;
+use raylib::{colors, core, shapes, text, Color};
 
 fn main() {
-    let screen_width = 800;
-    let screen_height = 450;
-    let rust_orange = raylib::Color::new(222, 165, 132, 255);
-    raylib::core::init_window(screen_width, screen_height, "raylib-rust logo");
-    unsafe { raylib_sys::SetTargetFPS(60) }
-    while !raylib::core::window_should_close() {
-        unsafe { raylib_sys::BeginDrawing() };
-        raylib::core::clear_background(raylib::colors::RAYWHITE);
-        unsafe {
-            raylib_sys::DrawRectangle(
-                screen_width / 2 - 128,
-                screen_height / 2 - 128,
-                256,
-                256,
-                rust_orange.into_ffi(),
-            )
-        }
-        unsafe {
-            raylib_sys::DrawRectangle(
-                screen_width / 2 - 112,
-                screen_height / 2 - 112,
-                224,
-                224,
-                raylib::colors::RAYWHITE.into_ffi(),
-            )
-        }
-        unsafe {
-            raylib_sys::DrawText(
-                CString::new("rust").unwrap().as_ptr(),
-                screen_width / 2 - 69,
-                screen_height / 2 + 18,
-                50,
-                rust_orange.into_ffi(),
-            )
-        }
-        unsafe {
-            raylib_sys::DrawText(
-                CString::new("raylib").unwrap().as_ptr(),
-                screen_width / 2 - 44,
-                screen_height / 2 + 48,
-                50,
-                rust_orange.into_ffi(),
-            )
-        }
-        unsafe { raylib_sys::EndDrawing() }
+    let w = 800;
+    let h = 450;
+    let rust_orange = Color::new(222, 165, 132, 255);
+    core::init_window(w, h, "raylib-rust logo");
+    core::set_target_fps(60);
+    while !core::window_should_close() {
+        core::begin_drawing();
+        core::clear_background(colors::RAYWHITE);
+        shapes::draw_rectangle(w / 2 - 128, h / 2 - 128, 256, 256, rust_orange);
+        shapes::draw_rectangle(w / 2 - 112, h / 2 - 112, 224, 224, colors::RAYWHITE);
+        text::draw_text("rust", w / 2 - 69, h / 2 + 18, 50, rust_orange);
+        text::draw_text("raylib", w / 2 - 44, h / 2 + 48, 50, rust_orange);
+        core::end_drawing();
     }
-    raylib::core::close_window();
+    core::close_window();
 }

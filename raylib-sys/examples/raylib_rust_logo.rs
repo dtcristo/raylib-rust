@@ -2,61 +2,41 @@ extern crate raylib_sys;
 
 use std::ffi::CString;
 
+use raylib_sys::{
+    bool_, BeginDrawing, ClearBackground, CloseWindow, Color, DrawRectangle, DrawText, EndDrawing,
+    InitWindow, SetTargetFPS, WindowShouldClose,
+};
+
 fn main() {
-    let screen_width = 800;
-    let screen_height = 450;
-    let ray_white = raylib_sys::Color {
+    let w = 800;
+    let h = 450;
+    let ray_white = Color {
         r: 245,
         g: 245,
         b: 245,
         a: 255,
     };
-    let rust_orange = raylib_sys::Color {
+    let rust_orange = Color {
         r: 222,
         g: 165,
         b: 132,
         a: 255,
     };
+    let c_window_title = CString::new("raylib-rust logo").unwrap();
+    let c_text1 = CString::new("rust").unwrap();
+    let c_text2 = CString::new("raylib").unwrap();
     unsafe {
-        raylib_sys::InitWindow(
-            screen_width,
-            screen_height,
-            CString::new("raylib-rust logo").unwrap().as_ptr(),
-        );
-        raylib_sys::SetTargetFPS(60);
-        while raylib_sys::WindowShouldClose() == 0 {
-            raylib_sys::BeginDrawing();
-            raylib_sys::ClearBackground(ray_white);
-            raylib_sys::DrawRectangle(
-                screen_width / 2 - 128,
-                screen_height / 2 - 128,
-                256,
-                256,
-                rust_orange,
-            );
-            raylib_sys::DrawRectangle(
-                screen_width / 2 - 112,
-                screen_height / 2 - 112,
-                224,
-                224,
-                ray_white,
-            );
-            raylib_sys::DrawText(
-                CString::new("rust").unwrap().as_ptr(),
-                screen_width / 2 - 69,
-                screen_height / 2 + 18,
-                50,
-                rust_orange,
-            );
-            raylib_sys::DrawText(
-                CString::new("raylib").unwrap().as_ptr(),
-                screen_width / 2 - 44,
-                screen_height / 2 + 48,
-                50,
-                rust_orange,
-            );
-            raylib_sys::EndDrawing();
+        InitWindow(w, h, c_window_title.as_ptr());
+        SetTargetFPS(60);
+        while WindowShouldClose() != bool_::true_ {
+            BeginDrawing();
+            ClearBackground(ray_white);
+            DrawRectangle(w / 2 - 128, h / 2 - 128, 256, 256, rust_orange);
+            DrawRectangle(w / 2 - 112, h / 2 - 112, 224, 224, ray_white);
+            DrawText(c_text1.as_ptr(), w / 2 - 69, h / 2 + 18, 50, rust_orange);
+            DrawText(c_text2.as_ptr(), w / 2 - 44, h / 2 + 48, 50, rust_orange);
+            EndDrawing();
         }
-        raylib_sys::CloseWindow();
+        CloseWindow();
     }
 }
