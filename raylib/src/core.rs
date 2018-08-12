@@ -1,6 +1,6 @@
 use std::ffi::CString;
 
-use {ffi, Color};
+use {ffi, Color, Image};
 
 //------------------------------------------------------------------------------
 // Window-related functions
@@ -8,7 +8,8 @@ use {ffi, Color};
 
 /// Initialize window and OpenGL context
 pub fn init_window(width: i32, height: i32, title: &str) {
-    unsafe { ffi::InitWindow(width, height, CString::new(title).unwrap().as_ptr()) }
+    let c_title = CString::new(title).unwrap();
+    unsafe { ffi::InitWindow(width, height, c_title.as_ptr()) }
 }
 /// Close window and unload OpenGL context
 pub fn close_window() {
@@ -30,13 +31,14 @@ pub fn is_window_minimized() -> bool {
 pub fn toggle_fullscreen() {
     unsafe { ffi::ToggleFullscreen() }
 }
-// /// Set icon for window (only PLATFORM_DESKTOP)
-// pub fn set_window_icon(image: Image) {
-//     unsafe { ffi::SetWindowIcon(image) }
-// }
+/// Set icon for window (only PLATFORM_DESKTOP)
+pub fn set_window_icon(image: Image) {
+    unsafe { ffi::SetWindowIcon(image.into_ffi()) }
+}
 /// Set title for window (only PLATFORM_DESKTOP)
 pub fn set_window_title(title: &str) {
-    unsafe { ffi::SetWindowTitle(CString::new(title).unwrap().as_ptr()) }
+    let c_title = CString::new(title).unwrap();
+    unsafe { ffi::SetWindowTitle(c_title.as_ptr()) }
 }
 /// Set window position on screen (only PLATFORM_DESKTOP)
 pub fn set_window_position(x: i32, y: i32) {
@@ -95,4 +97,74 @@ pub fn disable_cursor() {
 /// Set background color (framebuffer clear color)
 pub fn clear_background(color: Color) {
     unsafe { ffi::ClearBackground(color.into_ffi()) }
+}
+/// Setup canvas (framebuffer) to start drawing
+pub fn begin_drawing() {
+    unsafe { ffi::BeginDrawing() }
+}
+/// End canvas drawing and swap buffers (double buffering)
+pub fn end_drawing() {
+    unsafe { ffi::EndDrawing() }
+}
+// /// Initialize 2D mode with custom camera (2D)
+// pub fn begin_mode_2d(camera: Camera2D) {
+//     unsafe { ffi::BeginMode2D(camera) }
+// }
+/// Ends 2D mode with custom camera
+pub fn end_mode_2d() {
+    unsafe { ffi::EndMode2D() }
+}
+// /// Initializes 3D mode with custom camera (3D)
+// pub fn begin_mode_3d(camera: Camera3D) {
+//     unsafe { ffi::BeginMode3D(camera) }
+// }
+/// Ends 3D mode and returns to default 2D orthographic mode
+pub fn end_mode_3d() {
+    unsafe { ffi::EndMode3D() }
+}
+// /// Initializes render texture for drawing
+// pub fn begin_texture_mode(target: RenderTexture2D) {
+//     unsafe { ffi::BeginTextureMode(target) }
+// }
+/// Ends drawing to render texture
+pub fn end_texture_mode() {
+    unsafe { ffi::EndTextureMode() }
+}
+
+//------------------------------------------------------------------------------
+// Screen-space-related functions
+//------------------------------------------------------------------------------
+
+// /// Returns a ray trace from mouse position
+// pub fn get_mouse_ray(mouse_position: Vector2, camera: Camera) -> Ray {
+//     unsafe { ffi::GetMouseRay(mouse_position, camera) }
+// }
+// /// Returns the screen space position for a 3d world space position
+// pub fn get_world_to_screen(position: Vector3, camera: Camera) -> Vector2 {
+//     unsafe { ffi::GetWorldToScreen(position, camera) }
+// }
+// /// Returns camera transform matrix (view matrix)
+// pub fn get_camera_matrix(camera: Camera) -> Matrix {
+//     unsafe { ffi::GetCameraMatrix(camera) }
+// }
+
+//------------------------------------------------------------------------------
+// Timming-related functions
+//------------------------------------------------------------------------------
+
+/// Set target FPS (maximum)
+pub fn set_target_fps(fps: i32) {
+    unsafe { ffi::SetTargetFPS(fps) }
+}
+/// Returns current FPS
+pub fn get_fps() -> i32 {
+    unsafe { ffi::GetFPS() }
+}
+/// Returns time in seconds for last frame drawn
+pub fn get_frame_time() -> f32 {
+    unsafe { ffi::GetFrameTime() }
+}
+/// Returns elapsed time in seconds since [`init_window`]: #method.init_window
+pub fn get_time() -> f64 {
+    unsafe { ffi::GetTime() }
 }

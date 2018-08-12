@@ -29,9 +29,7 @@ impl Color {
             a: a,
         }
     }
-    // TODO: Remove pub from this function
-    #[doc(hidden)]
-    pub fn into_ffi(self) -> ffi::Color {
+    fn into_ffi(self) -> ffi::Color {
         ffi::Color {
             r: self.r,
             g: self.g,
