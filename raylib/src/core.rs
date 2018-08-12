@@ -1,8 +1,10 @@
 use std::ffi::CString;
 
-use ffi;
+use {ffi, Color};
 
+//------------------------------------------------------------------------------
 // Window-related functions
+//------------------------------------------------------------------------------
 
 /// Initialize window and OpenGL context
 pub fn init_window(width: i32, height: i32, title: &str) {
@@ -59,4 +61,38 @@ pub fn get_screen_width() -> i32 {
 /// Get current screen height
 pub fn get_screen_height() -> i32 {
     unsafe { ffi::GetScreenHeight() }
+}
+
+//------------------------------------------------------------------------------
+// Cursor-related functions
+//------------------------------------------------------------------------------
+
+/// Shows cursor
+pub fn show_cursor() {
+    unsafe { ffi::ShowCursor() }
+}
+/// Hides cursor
+pub fn hide_cursor() {
+    unsafe { ffi::HideCursor() }
+}
+/// Check if cursor is not visible
+pub fn is_cursor_hidden() -> bool {
+    unsafe { ffi::IsCursorHidden() == ffi::bool_::true_ }
+}
+/// Enables cursor (unlock cursor)
+pub fn enable_cursor() {
+    unsafe { ffi::EnableCursor() }
+}
+/// Disables cursor (lock cursor)
+pub fn disable_cursor() {
+    unsafe { ffi::DisableCursor() }
+}
+
+//------------------------------------------------------------------------------
+// Drawing-related functions
+//------------------------------------------------------------------------------
+
+/// Set background color (framebuffer clear color)
+pub fn clear_background(color: Color) {
+    unsafe { ffi::ClearBackground(color.into_ffi()) }
 }
