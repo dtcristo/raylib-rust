@@ -164,7 +164,7 @@ pub fn get_fps() -> i32 {
 pub fn get_frame_time() -> f32 {
     unsafe { ffi::GetFrameTime() }
 }
-/// Returns elapsed time in seconds since [`init_window`]: #method.init_window
+/// Returns elapsed time in seconds since [`init_window`](fn.init_window.html)
 pub fn get_time() -> f64 {
     unsafe { ffi::GetTime() }
 }
