@@ -33,7 +33,8 @@ pub fn toggle_fullscreen() {
 }
 /// Set icon for window (only PLATFORM_DESKTOP)
 pub fn set_window_icon(image: Image) {
-    unsafe { raw::SetWindowIcon(image.into_raw()) }
+    let raw_image = image.into_raw();
+    unsafe { raw::SetWindowIcon(raw_image) }
 }
 /// Set title for window (only PLATFORM_DESKTOP)
 pub fn set_window_title(title: &str) {
@@ -96,7 +97,8 @@ pub fn disable_cursor() {
 
 /// Set background color (framebuffer clear color)
 pub fn clear_background(color: Color) {
-    unsafe { raw::ClearBackground(color.into_raw()) }
+    let raw_color = color.into_raw();
+    unsafe { raw::ClearBackground(raw_color) }
 }
 /// Setup canvas (framebuffer) to start drawing
 pub fn begin_drawing() {

@@ -1,5 +1,5 @@
 use std::collections::HashSet;
-use std::os::raw::c_int;
+use std::os::raw::{c_int, c_uint};
 
 use {raw, Vector2};
 
@@ -43,7 +43,7 @@ impl Gesture {
 
 /// Enable a set of gestures
 pub fn set_gestures_enabled(gesture_flags: HashSet<Gesture>) {
-    let raw_flags = gesture_flags.iter().fold(0, |acc, g| acc | g.into_raw()) as u32;
+    let raw_flags = gesture_flags.iter().fold(0, |acc, g| acc | g.into_raw()) as c_uint;
     unsafe { raw::SetGesturesEnabled(raw_flags) }
 }
 /// Check if a gesture has been detected
