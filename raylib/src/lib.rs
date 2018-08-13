@@ -62,7 +62,10 @@ impl Vector2 {
     }
 }
 
-/// Color type, RGBA (32bit)
+pub type Vector3 = raw::Vector3;
+pub type Vector4 = raw::Vector4;
+
+/// Color type/functions, RGBA (32bit)
 #[derive(Debug, Copy, Clone)]
 pub struct Color {
     pub r: u8,
@@ -79,6 +82,14 @@ impl Color {
             a: a,
         }
     }
+    fn from_raw(raw: raw::Color) -> Color {
+        Color {
+            r: raw.r,
+            g: raw.g,
+            b: raw.b,
+            a: raw.a,
+        }
+    }
     fn into_raw(self) -> raw::Color {
         raw::Color {
             r: self.r,
@@ -86,6 +97,30 @@ impl Color {
             b: self.b,
             a: self.a,
         }
+    }
+    /// Returns hexadecimal value for a Color
+    pub fn to_int(self) -> u32 {
+        let raw = self.into_raw();
+        unsafe { raw::ColorToInt(raw) as u32 }
+    }
+    /// Returns color normalized as float [0..1]
+    pub fn normalize(self) -> Vector4 {
+        let raw = self.into_raw();
+        unsafe { raw::ColorNormalize(raw) }
+    }
+    /// Returns HSV values for a Color
+    pub fn to_hsv(self) -> Vector3 {
+        let raw = self.into_raw();
+        unsafe { raw::ColorToHSV(raw) }
+    }
+    /// Returns a Color struct from hexadecimal value
+    pub fn from_int(value: u32) -> Color {
+        Color::from_raw(unsafe { raw::GetColor(value as c_int) })
+    }
+    /// Color fade-in or fade-out, alpha goes from 0.0f to 1.0f
+    pub fn fade(self, alpha: f32) -> Color {
+        let raw = self.into_raw();
+        Color::from_raw(unsafe { raw::Fade(raw, alpha) })
     }
 }
 
