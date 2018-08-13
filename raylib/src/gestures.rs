@@ -4,19 +4,20 @@ use std::os::raw::c_int;
 use {raw, Vector2};
 
 /// Gesture type
+#[repr(u32)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Gesture {
-    None,
-    Tap,
-    DoubleTap,
-    Hold,
-    Drag,
-    SwipeRight,
-    SwipeLeft,
-    SwipeUp,
-    SwipeDown,
-    PinchIn,
-    PinchOut,
+    None = raw::Gestures::GESTURE_NONE,
+    Tap = raw::Gestures::GESTURE_TAP,
+    DoubleTap = raw::Gestures::GESTURE_DOUBLETAP,
+    Hold = raw::Gestures::GESTURE_HOLD,
+    Drag = raw::Gestures::GESTURE_DRAG,
+    SwipeRight = raw::Gestures::GESTURE_SWIPE_RIGHT,
+    SwipeLeft = raw::Gestures::GESTURE_SWIPE_LEFT,
+    SwipeUp = raw::Gestures::GESTURE_SWIPE_UP,
+    SwipeDown = raw::Gestures::GESTURE_SWIPE_DOWN,
+    PinchIn = raw::Gestures::GESTURE_PINCH_IN,
+    PinchOut = raw::Gestures::GESTURE_PINCH_OUT,
 }
 impl Gesture {
     fn from_raw(raw: c_int) -> Gesture {
@@ -36,19 +37,7 @@ impl Gesture {
         }
     }
     fn into_raw(self) -> c_int {
-        (match self {
-            Gesture::None => raw::Gestures::GESTURE_NONE,
-            Gesture::Tap => raw::Gestures::GESTURE_TAP,
-            Gesture::DoubleTap => raw::Gestures::GESTURE_DOUBLETAP,
-            Gesture::Hold => raw::Gestures::GESTURE_HOLD,
-            Gesture::Drag => raw::Gestures::GESTURE_DRAG,
-            Gesture::SwipeRight => raw::Gestures::GESTURE_SWIPE_RIGHT,
-            Gesture::SwipeLeft => raw::Gestures::GESTURE_SWIPE_LEFT,
-            Gesture::SwipeUp => raw::Gestures::GESTURE_SWIPE_UP,
-            Gesture::SwipeDown => raw::Gestures::GESTURE_SWIPE_DOWN,
-            Gesture::PinchIn => raw::Gestures::GESTURE_PINCH_IN,
-            Gesture::PinchOut => raw::Gestures::GESTURE_PINCH_OUT,
-        } as c_int)
+        self as c_int
     }
 }
 
@@ -59,7 +48,7 @@ pub fn set_gestures_enabled(gesture_flags: HashSet<Gesture>) {
 }
 /// Check if a gesture has been detected
 pub fn is_gesture_detected(gesture: Gesture) -> bool {
-    unsafe { raw::IsGestureDetected(gesture.into_raw() as i32) == raw::bool_::true_ }
+    unsafe { raw::IsGestureDetected(gesture.into_raw()) == raw::bool_::true_ }
 }
 /// Get latest detected gesture
 pub fn get_gesture_detected() -> Gesture {

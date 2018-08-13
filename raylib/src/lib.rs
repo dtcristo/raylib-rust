@@ -133,50 +133,51 @@ impl Image {
 /// Pixel formats
 ///
 /// NOTE: Support depends on OpenGL version and platform
+#[repr(u32)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PixelFormat {
     /// 8 bit per pixel (no alpha)
-    UncompressedGrayscale,
+    UncompressedGrayscale = raw::PixelFormat::UNCOMPRESSED_GRAYSCALE,
     /// 8*2 bpp (2 channels)
-    UncompressedGrayAlpha,
+    UncompressedGrayAlpha = raw::PixelFormat::UNCOMPRESSED_GRAY_ALPHA,
     /// 16 bpp
-    UncompressedR5G6B5,
+    UncompressedR5G6B5 = raw::PixelFormat::UNCOMPRESSED_R5G6B5,
     /// 24 bpp
-    UncompressedR8g8b8,
+    UncompressedR8g8b8 = raw::PixelFormat::UNCOMPRESSED_R8G8B8,
     /// 16 bpp (1 bit alpha)
-    UncompressedR5g5b5a1,
+    UncompressedR5g5b5a1 = raw::PixelFormat::UNCOMPRESSED_R5G5B5A1,
     /// 16 bpp (4 bit alpha)
-    UncompressedR4g4b4a4,
+    UncompressedR4g4b4a4 = raw::PixelFormat::UNCOMPRESSED_R4G4B4A4,
     /// 32 bpp
-    UncompressedR8g8b8a8,
+    UncompressedR8g8b8a8 = raw::PixelFormat::UNCOMPRESSED_R8G8B8A8,
     /// 32 bpp (1 channel - float)
-    UncompressedR32,
+    UncompressedR32 = raw::PixelFormat::UNCOMPRESSED_R32,
     /// 32*3 bpp (3 channels - float)
-    UncompressedR32g32b32,
+    UncompressedR32g32b32 = raw::PixelFormat::UNCOMPRESSED_R32G32B32,
     /// 32*4 bpp (4 channels - float)
-    UncompressedR32g32b32a32,
+    UncompressedR32g32b32a32 = raw::PixelFormat::UNCOMPRESSED_R32G32B32A32,
     /// 4 bpp (no alpha)
-    CompressedDxt1Rgb,
+    CompressedDxt1Rgb = raw::PixelFormat::COMPRESSED_DXT1_RGB,
     /// 4 bpp (1 bit alpha)
-    CompressedDxt1Rgba,
+    CompressedDxt1Rgba = raw::PixelFormat::COMPRESSED_DXT1_RGBA,
     /// 8 bpp
-    CompressedDxt3Rgba,
+    CompressedDxt3Rgba = raw::PixelFormat::COMPRESSED_DXT3_RGBA,
     /// 8 bpp
-    CompressedDxt5Rgba,
+    CompressedDxt5Rgba = raw::PixelFormat::COMPRESSED_DXT5_RGBA,
     /// 4 bpp
-    CompressedEtc1Rgb,
+    CompressedEtc1Rgb = raw::PixelFormat::COMPRESSED_ETC1_RGB,
     /// 4 bpp
-    CompressedEtc2Rgb,
+    CompressedEtc2Rgb = raw::PixelFormat::COMPRESSED_ETC2_RGB,
     /// 8 bpp
-    CompressedEtc2EacRgba,
+    CompressedEtc2EacRgba = raw::PixelFormat::COMPRESSED_ETC2_EAC_RGBA,
     /// 4 bpp
-    CompressedPvrtRgb,
+    CompressedPvrtRgb = raw::PixelFormat::COMPRESSED_PVRT_RGB,
     /// 4 bpp
-    CompressedPvrtRgba,
+    CompressedPvrtRgba = raw::PixelFormat::COMPRESSED_PVRT_RGBA,
     /// 8 bpp
-    CompressedAstc4x4Rgba,
+    CompressedAstc4x4Rgba = raw::PixelFormat::COMPRESSED_ASTC_4x4_RGBA,
     /// 2 bpp
-    CompressedAstc8x8Rgba,
+    CompressedAstc8x8Rgba = raw::PixelFormat::COMPRESSED_ASTC_8x8_RGBA,
 }
 impl PixelFormat {
     fn from_raw(raw: c_int) -> PixelFormat {
@@ -206,28 +207,6 @@ impl PixelFormat {
         }
     }
     fn into_raw(self) -> c_int {
-        (match self {
-            PixelFormat::UncompressedGrayscale => raw::PixelFormat::UNCOMPRESSED_GRAYSCALE,
-            PixelFormat::UncompressedGrayAlpha => raw::PixelFormat::UNCOMPRESSED_GRAY_ALPHA,
-            PixelFormat::UncompressedR5G6B5 => raw::PixelFormat::UNCOMPRESSED_R5G6B5,
-            PixelFormat::UncompressedR8g8b8 => raw::PixelFormat::UNCOMPRESSED_R8G8B8,
-            PixelFormat::UncompressedR5g5b5a1 => raw::PixelFormat::UNCOMPRESSED_R5G5B5A1,
-            PixelFormat::UncompressedR4g4b4a4 => raw::PixelFormat::UNCOMPRESSED_R4G4B4A4,
-            PixelFormat::UncompressedR8g8b8a8 => raw::PixelFormat::UNCOMPRESSED_R8G8B8A8,
-            PixelFormat::UncompressedR32 => raw::PixelFormat::UNCOMPRESSED_R32,
-            PixelFormat::UncompressedR32g32b32 => raw::PixelFormat::UNCOMPRESSED_R32G32B32,
-            PixelFormat::UncompressedR32g32b32a32 => raw::PixelFormat::UNCOMPRESSED_R32G32B32A32,
-            PixelFormat::CompressedDxt1Rgb => raw::PixelFormat::COMPRESSED_DXT1_RGB,
-            PixelFormat::CompressedDxt1Rgba => raw::PixelFormat::COMPRESSED_DXT1_RGBA,
-            PixelFormat::CompressedDxt3Rgba => raw::PixelFormat::COMPRESSED_DXT3_RGBA,
-            PixelFormat::CompressedDxt5Rgba => raw::PixelFormat::COMPRESSED_DXT5_RGBA,
-            PixelFormat::CompressedEtc1Rgb => raw::PixelFormat::COMPRESSED_ETC1_RGB,
-            PixelFormat::CompressedEtc2Rgb => raw::PixelFormat::COMPRESSED_ETC2_RGB,
-            PixelFormat::CompressedEtc2EacRgba => raw::PixelFormat::COMPRESSED_ETC2_EAC_RGBA,
-            PixelFormat::CompressedPvrtRgb => raw::PixelFormat::COMPRESSED_PVRT_RGB,
-            PixelFormat::CompressedPvrtRgba => raw::PixelFormat::COMPRESSED_PVRT_RGBA,
-            PixelFormat::CompressedAstc4x4Rgba => raw::PixelFormat::COMPRESSED_ASTC_4x4_RGBA,
-            PixelFormat::CompressedAstc8x8Rgba => raw::PixelFormat::COMPRESSED_ASTC_8x8_RGBA,
-        } as c_int)
+        self as c_int
     }
 }
