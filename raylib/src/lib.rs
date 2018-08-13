@@ -41,6 +41,27 @@ pub const RAD2DEG: f64 = raw::RAD2DEG;
 // Structs
 //------------------------------------------------------------------------------
 
+/// Vector2 type
+#[derive(Debug, Copy, Clone)]
+pub struct Vector2 {
+    pub x: f32,
+    pub y: f32,
+}
+impl Vector2 {
+    pub fn new(x: f32, y: f32) -> Vector2 {
+        Vector2 { x: x, y: y }
+    }
+    fn from_raw(raw: raw::Vector2) -> Vector2 {
+        Vector2 { x: raw.x, y: raw.y }
+    }
+    fn into_raw(self) -> raw::Vector2 {
+        raw::Vector2 {
+            x: self.x,
+            y: self.y,
+        }
+    }
+}
+
 /// Color type, RGBA (32bit)
 #[derive(Debug, Copy, Clone)]
 pub struct Color {
