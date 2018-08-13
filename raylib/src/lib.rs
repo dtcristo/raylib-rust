@@ -2,15 +2,44 @@ extern crate raylib_sys as raw;
 
 use std::os::raw::{c_int, c_void};
 
+//------------------------------------------------------------------------------
+// Modules
+//------------------------------------------------------------------------------
+
+/// Audio Loading and Playing Functions
 pub mod audio;
+/// Camera System Functions
+pub mod camera;
 /// Custom raylib color palette for amazing visuals
 pub mod colors;
+/// Window, Graphics Device and Input Handling Functions
 pub mod core;
+/// Gestures and Touch Handling Functions
+pub mod gestures;
+/// Basic 3D Shape and 3D Model Loading and Drawing Functions
 pub mod models;
+/// Shaders System Functions
+///
+/// NOTE: This functions are useless when using OpenGL 1.1
 pub mod shaders;
+/// Basic Shape Drawing Functions
 pub mod shapes;
+/// Font Loading and Text Drawing Functions
 pub mod text;
+/// Texture Loading and Drawing Functions
 pub mod textures;
+
+//------------------------------------------------------------------------------
+// Constants
+//------------------------------------------------------------------------------
+
+pub const PI: f64 = raw::PI;
+pub const DEG2RAD: f64 = raw::DEG2RAD;
+pub const RAD2DEG: f64 = raw::RAD2DEG;
+
+//------------------------------------------------------------------------------
+// Structs
+//------------------------------------------------------------------------------
 
 /// Color type, RGBA (32bit)
 #[derive(Debug, Copy, Clone)]
@@ -38,6 +67,47 @@ impl Color {
         }
     }
 }
+
+/// Image type, bpp always RGBA (32bit)
+///
+/// NOTE: Data stored in CPU memory (RAM)
+#[derive(Debug, Clone)]
+pub struct Image {
+    /// Image raw data
+    data: *mut c_void,
+    /// Image base width
+    pub width: i32,
+    /// Image base height
+    pub height: i32,
+    /// Mipmap levels, 1 by default
+    pub mipmaps: i32,
+    /// Data format (PixelFormat type)
+    pub format: PixelFormat,
+}
+impl Image {
+    fn from_raw(raw: raw::Image) -> Image {
+        Image {
+            data: raw.data,
+            width: raw.width,
+            height: raw.height,
+            mipmaps: raw.mipmaps,
+            format: PixelFormat::from_raw(raw.format),
+        }
+    }
+    fn into_raw(self) -> raw::Image {
+        raw::Image {
+            data: self.data,
+            width: self.width,
+            height: self.height,
+            mipmaps: self.mipmaps,
+            format: self.format.into_raw(),
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+// Enums
+//------------------------------------------------------------------------------
 
 /// Pixel formats
 ///
@@ -138,42 +208,5 @@ impl PixelFormat {
             PixelFormat::CompressedAstc4x4Rgba => raw::PixelFormat::COMPRESSED_ASTC_4x4_RGBA,
             PixelFormat::CompressedAstc8x8Rgba => raw::PixelFormat::COMPRESSED_ASTC_8x8_RGBA,
         } as c_int)
-    }
-}
-
-/// Image type, bpp always RGBA (32bit)
-///
-/// NOTE: Data stored in CPU memory (RAM)
-#[derive(Debug, Clone)]
-pub struct Image {
-    /// Image raw data
-    data: *mut c_void,
-    /// Image base width
-    pub width: i32,
-    /// Image base height
-    pub height: i32,
-    /// Mipmap levels, 1 by default
-    pub mipmaps: i32,
-    /// Data format (PixelFormat type)
-    pub format: PixelFormat,
-}
-impl Image {
-    fn from_raw(raw: raw::Image) -> Image {
-        Image {
-            data: raw.data,
-            width: raw.width,
-            height: raw.height,
-            mipmaps: raw.mipmaps,
-            format: PixelFormat::from_raw(raw.format),
-        }
-    }
-    fn into_raw(self) -> raw::Image {
-        raw::Image {
-            data: self.data,
-            width: self.width,
-            height: self.height,
-            mipmaps: self.mipmaps,
-            format: self.format.into_raw(),
-        }
     }
 }
