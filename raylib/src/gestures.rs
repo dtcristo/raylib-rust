@@ -1,44 +1,6 @@
-use std::os::raw::c_uint;
+use std::os::raw::{c_int, c_uint};
 
 use {raw, Vector2};
-
-// /// Gesture type
-// #[repr(u32)]
-// #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-// pub enum Gesture {
-//     None = raw::Gestures::GESTURE_NONE,
-//     Tap = raw::Gestures::GESTURE_TAP,
-//     DoubleTap = raw::Gestures::GESTURE_DOUBLETAP,
-//     Hold = raw::Gestures::GESTURE_HOLD,
-//     Drag = raw::Gestures::GESTURE_DRAG,
-//     SwipeRight = raw::Gestures::GESTURE_SWIPE_RIGHT,
-//     SwipeLeft = raw::Gestures::GESTURE_SWIPE_LEFT,
-//     SwipeUp = raw::Gestures::GESTURE_SWIPE_UP,
-//     SwipeDown = raw::Gestures::GESTURE_SWIPE_DOWN,
-//     PinchIn = raw::Gestures::GESTURE_PINCH_IN,
-//     PinchOut = raw::Gestures::GESTURE_PINCH_OUT,
-// }
-// impl Gesture {
-//     fn from_raw(raw: c_int) -> Gesture {
-//         match raw as u32 {
-//             raw::Gestures::GESTURE_NONE => Gesture::None,
-//             raw::Gestures::GESTURE_TAP => Gesture::Tap,
-//             raw::Gestures::GESTURE_DOUBLETAP => Gesture::DoubleTap,
-//             raw::Gestures::GESTURE_HOLD => Gesture::Hold,
-//             raw::Gestures::GESTURE_DRAG => Gesture::Drag,
-//             raw::Gestures::GESTURE_SWIPE_RIGHT => Gesture::SwipeRight,
-//             raw::Gestures::GESTURE_SWIPE_LEFT => Gesture::SwipeLeft,
-//             raw::Gestures::GESTURE_SWIPE_UP => Gesture::SwipeUp,
-//             raw::Gestures::GESTURE_SWIPE_DOWN => Gesture::SwipeDown,
-//             raw::Gestures::GESTURE_PINCH_IN => Gesture::PinchIn,
-//             raw::Gestures::GESTURE_PINCH_OUT => Gesture::PinchOut,
-//             _ => panic!("Invalid Gesture value `{}`.", raw),
-//         }
-//     }
-//     fn into_raw(self) -> c_int {
-//         self as c_int
-//     }
-// }
 
 bitflags! {
     /// Gesture type
@@ -47,7 +9,7 @@ bitflags! {
     pub struct Gesture: u32 {
         const NONE = raw::Gestures::GESTURE_NONE;
         const TAP = raw::Gestures::GESTURE_TAP;
-        const DOUBLE_TAP = raw::Gestures::GESTURE_DOUBLETAP;
+        const DOUBLETAP = raw::Gestures::GESTURE_DOUBLETAP;
         const HOLD = raw::Gestures::GESTURE_HOLD;
         const DRAG = raw::Gestures::GESTURE_DRAG;
         const SWIPE_RIGHT = raw::Gestures::GESTURE_SWIPE_RIGHT;
@@ -66,7 +28,7 @@ pub fn set_gestures_enabled(gesture_flags: Gesture) {
 }
 /// Check if a gesture has been detected
 pub fn is_gesture_detected(gesture: Gesture) -> bool {
-    let raw_gesture = gesture.bits() as i32;
+    let raw_gesture = gesture.bits() as c_int;
     unsafe { raw::IsGestureDetected(raw_gesture) == raw::bool_::true_ }
 }
 /// Get latest detected gesture
