@@ -1,6 +1,7 @@
 use std::ffi::CString;
+use std::os::raw::{c_int, c_uchar};
 
-use {raw, Color, Image};
+use {raw, Color, ConfigFlags, Image, LogType};
 
 //------------------------------------------------------------------------------
 // Window-related functions
@@ -8,8 +9,8 @@ use {raw, Color, Image};
 
 /// Initialize window and OpenGL context
 pub fn init_window(width: i32, height: i32, title: &str) {
-    let c_title = CString::new(title).unwrap();
-    unsafe { raw::InitWindow(width, height, c_title.as_ptr()) }
+    let raw_title = CString::new(title).unwrap();
+    unsafe { raw::InitWindow(width, height, raw_title.as_ptr()) }
 }
 /// Close window and unload OpenGL context
 pub fn close_window() {
@@ -38,8 +39,8 @@ pub fn set_window_icon(image: Image) {
 }
 /// Set title for window (only PLATFORM_DESKTOP)
 pub fn set_window_title(title: &str) {
-    let c_title = CString::new(title).unwrap();
-    unsafe { raw::SetWindowTitle(c_title.as_ptr()) }
+    let raw_title = CString::new(title).unwrap();
+    unsafe { raw::SetWindowTitle(raw_title.as_ptr()) }
 }
 /// Set window position on screen (only PLATFORM_DESKTOP)
 pub fn set_window_position(x: i32, y: i32) {
@@ -49,7 +50,7 @@ pub fn set_window_position(x: i32, y: i32) {
 pub fn set_window_monitor(monitor: i32) {
     unsafe { raw::SetWindowMonitor(monitor) }
 }
-/// Set window minimum dimensions (for FLAG_WINDOW_RESIZABLE)
+/// Set window minimum dimensions (for [`ConfigFlags::WINDOW_RESIZABLE`](../struct.ConfigFlags.html#associatedconstant.WINDOW_RESIZABLE))
 pub fn set_window_min_size(width: i32, height: i32) {
     unsafe { raw::SetWindowMinSize(width, height) }
 }
@@ -169,4 +170,38 @@ pub fn get_frame_time() -> f32 {
 /// Returns elapsed time in seconds since [`init_window`](fn.init_window.html)
 pub fn get_time() -> f64 {
     unsafe { raw::GetTime() }
+}
+
+//------------------------------------------------------------------------------
+// Misc. functions
+//------------------------------------------------------------------------------
+
+/// Activate raylib logo at startup (can be done with flags)
+pub fn show_logo() {
+    unsafe { raw::ShowLogo() }
+}
+/// Setup window configuration flags (view [`ConfigFlags`](../struct.ConfigFlags.html))
+pub fn set_config_flags(flags: ConfigFlags) {
+    let raw_flags = flags.bits() as c_uchar;
+    unsafe { raw::SetConfigFlags(raw_flags) }
+}
+/// Enable trace log message types (view [`LogType`](../struct.LogType.html))
+pub fn set_trace_log(log_types: LogType) {
+    let raw_log_types = log_types.bits() as c_uchar;
+    unsafe { raw::SetTraceLog(raw_log_types) }
+}
+/// Show trace log messages (one of [`LogType`](../struct.LogType.html))
+pub fn trace_log(log_type: LogType, text: &str) {
+    let raw_log_type = log_type.bits() as c_int;
+    let raw_text = CString::new(text).unwrap();
+    unsafe { raw::TraceLog(raw_log_type, raw_text.as_ptr()) }
+}
+/// Takes a screenshot of current screen (saved a .png)
+pub fn take_screenshot(file_name: &str) {
+    let raw_file_name = CString::new(file_name).unwrap();
+    unsafe { raw::TakeScreenshot(raw_file_name) }
+}
+/// Returns a random value between min and max (both included)
+pub fn get_random_value(min: i32, max: i32) {
+    unsafe { raw::GetRandomValue(min, max) }
 }

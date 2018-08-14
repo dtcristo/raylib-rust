@@ -1,3 +1,5 @@
+#[macro_use]
+extern crate bitflags;
 extern crate raylib_sys as raw;
 
 use std::os::raw::{c_int, c_void};
@@ -36,6 +38,46 @@ pub mod textures;
 pub const PI: f64 = raw::PI;
 pub const DEG2RAD: f64 = raw::DEG2RAD;
 pub const RAD2DEG: f64 = raw::RAD2DEG;
+
+//------------------------------------------------------------------------------
+// Bit fields
+//------------------------------------------------------------------------------
+
+bitflags! {
+    /// raylib Config Flags type
+    pub struct ConfigFlags: u32 {
+        /// Set to show raylib logo at startup
+        const SHOW_LOGO = raw::FLAG_SHOW_LOGO;
+        /// Set to run program in fullscreen
+        const FULLSCREEN_MODE = raw::FLAG_FULLSCREEN_MODE;
+        /// Set to allow resizable window
+        const WINDOW_RESIZABLE = raw::FLAG_WINDOW_RESIZABLE;
+        /// Set to disable window decoration (frame and buttons)
+        const WINDOW_UNDECORATED = raw::FLAG_WINDOW_UNDECORATED;
+        /// Set to allow transparent window
+        const WINDOW_TRANSPARENT = raw::FLAG_WINDOW_TRANSPARENT;
+        /// Set to try enabling MSAA 4X
+        const MSAA_4X_HINT = raw::FLAG_MSAA_4X_HINT;
+        /// Set to try enabling V-Sync on GPU
+        const VSYNC_HINT = raw::FLAG_VSYNC_HINT;
+    }
+}
+
+bitflags! {
+    /// Trace log type
+    pub struct LogType: u32 {
+        /// Info
+        const INFO = raw::LogType::LOG_INFO;
+        /// Warning
+        const WARNING = raw::LogType::LOG_WARNING;
+        /// Error
+        const ERROR = raw::LogType::LOG_ERROR;
+        /// Debug
+        const DEBUG = raw::LogType::LOG_DEBUG;
+        /// Other
+        const OTHER = raw::LogType::LOG_OTHER;
+    }
+}
 
 //------------------------------------------------------------------------------
 // Structs
