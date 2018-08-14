@@ -62,7 +62,7 @@ fn main() {
 fn release_suffix_for_target(target: &str) -> String {
     // TODO: Remove this when other platforms are supported and tested
     if !target.contains("linux") {
-        panic!("Unsupported target: {}", target);
+        panic!("Unsupported target `{}`.", target);
     }
     if target.contains("apple") {
         return String::from("macOS.tar.gz");
@@ -84,5 +84,5 @@ fn release_suffix_for_target(target: &str) -> String {
             return format!("{}-msvc15.zip", arch);
         }
     }
-    panic!("Unsupported target: {}", target);
+    panic!("Unsupported target `{}`.", target);
 }
