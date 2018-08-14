@@ -1,8 +1,13 @@
 #[macro_use]
 extern crate bitflags;
+#[macro_use]
+extern crate num_derive;
+extern crate num_traits;
 extern crate raylib_sys as raw;
 
 use std::os::raw::{c_int, c_void};
+
+use num_traits::FromPrimitive;
 
 //------------------------------------------------------------------------------
 // Modules
@@ -198,7 +203,7 @@ impl Image {
             width: self.width,
             height: self.height,
             mipmaps: self.mipmaps,
-            format: self.format.into_raw(),
+            format: self.format as c_int,
         }
     }
 }
@@ -211,14 +216,14 @@ impl Image {
 ///
 /// NOTE: Support depends on OpenGL version and platform
 #[repr(u32)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, FromPrimitive)]
 pub enum PixelFormat {
     /// 8 bit per pixel (no alpha)
     UncompressedGrayscale = raw::PixelFormat::UNCOMPRESSED_GRAYSCALE,
     /// 8*2 bpp (2 channels)
     UncompressedGrayAlpha = raw::PixelFormat::UNCOMPRESSED_GRAY_ALPHA,
     /// 16 bpp
-    UncompressedR5G6B5 = raw::PixelFormat::UNCOMPRESSED_R5G6B5,
+    UncompressedR5g6b5 = raw::PixelFormat::UNCOMPRESSED_R5G6B5,
     /// 24 bpp
     UncompressedR8g8b8 = raw::PixelFormat::UNCOMPRESSED_R8G8B8,
     /// 16 bpp (1 bit alpha)
@@ -258,32 +263,6 @@ pub enum PixelFormat {
 }
 impl PixelFormat {
     fn from_raw(raw: c_int) -> PixelFormat {
-        match raw as u32 {
-            raw::PixelFormat::UNCOMPRESSED_GRAYSCALE => PixelFormat::UncompressedGrayscale,
-            raw::PixelFormat::UNCOMPRESSED_GRAY_ALPHA => PixelFormat::UncompressedGrayAlpha,
-            raw::PixelFormat::UNCOMPRESSED_R5G6B5 => PixelFormat::UncompressedR5G6B5,
-            raw::PixelFormat::UNCOMPRESSED_R8G8B8 => PixelFormat::UncompressedR8g8b8,
-            raw::PixelFormat::UNCOMPRESSED_R5G5B5A1 => PixelFormat::UncompressedR5g5b5a1,
-            raw::PixelFormat::UNCOMPRESSED_R4G4B4A4 => PixelFormat::UncompressedR4g4b4a4,
-            raw::PixelFormat::UNCOMPRESSED_R8G8B8A8 => PixelFormat::UncompressedR8g8b8a8,
-            raw::PixelFormat::UNCOMPRESSED_R32 => PixelFormat::UncompressedR32,
-            raw::PixelFormat::UNCOMPRESSED_R32G32B32 => PixelFormat::UncompressedR32g32b32,
-            raw::PixelFormat::UNCOMPRESSED_R32G32B32A32 => PixelFormat::UncompressedR32g32b32a32,
-            raw::PixelFormat::COMPRESSED_DXT1_RGB => PixelFormat::CompressedDxt1Rgb,
-            raw::PixelFormat::COMPRESSED_DXT1_RGBA => PixelFormat::CompressedDxt1Rgba,
-            raw::PixelFormat::COMPRESSED_DXT3_RGBA => PixelFormat::CompressedDxt3Rgba,
-            raw::PixelFormat::COMPRESSED_DXT5_RGBA => PixelFormat::CompressedDxt5Rgba,
-            raw::PixelFormat::COMPRESSED_ETC1_RGB => PixelFormat::CompressedEtc1Rgb,
-            raw::PixelFormat::COMPRESSED_ETC2_RGB => PixelFormat::CompressedEtc2Rgb,
-            raw::PixelFormat::COMPRESSED_ETC2_EAC_RGBA => PixelFormat::CompressedEtc2EacRgba,
-            raw::PixelFormat::COMPRESSED_PVRT_RGB => PixelFormat::CompressedPvrtRgb,
-            raw::PixelFormat::COMPRESSED_PVRT_RGBA => PixelFormat::CompressedPvrtRgba,
-            raw::PixelFormat::COMPRESSED_ASTC_4x4_RGBA => PixelFormat::CompressedAstc4x4Rgba,
-            raw::PixelFormat::COMPRESSED_ASTC_8x8_RGBA => PixelFormat::CompressedAstc8x8Rgba,
-            _ => panic!("Invalid PixelFormat value `{}`.", raw),
-        }
-    }
-    fn into_raw(self) -> c_int {
-        self as c_int
+        PixelFormat::from_i32(raw).expect(&format!("Invalid PixelFormat value `{}`.", raw))
     }
 }
