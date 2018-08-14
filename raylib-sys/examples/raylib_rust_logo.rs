@@ -22,19 +22,19 @@ fn main() {
         b: 132,
         a: 255,
     };
-    let c_window_title = CString::new("raylib-rust logo").unwrap();
-    let c_text1 = CString::new("rust").unwrap();
-    let c_text2 = CString::new("raylib").unwrap();
+    let raw_window_title = CString::new("raylib-rust logo").unwrap();
+    let raw_text1 = CString::new("rust").unwrap();
+    let raw_text2 = CString::new("raylib").unwrap();
     unsafe {
-        InitWindow(w, h, c_window_title.as_ptr());
+        InitWindow(w, h, raw_window_title.as_ptr());
         SetTargetFPS(60);
         while WindowShouldClose() != bool_::true_ {
             BeginDrawing();
             ClearBackground(ray_white);
             DrawRectangle(w / 2 - 128, h / 2 - 128, 256, 256, rust_orange);
             DrawRectangle(w / 2 - 112, h / 2 - 112, 224, 224, ray_white);
-            DrawText(c_text1.as_ptr(), w / 2 - 69, h / 2 + 18, 50, rust_orange);
-            DrawText(c_text2.as_ptr(), w / 2 - 44, h / 2 + 48, 50, rust_orange);
+            DrawText(raw_text1.as_ptr(), w / 2 - 69, h / 2 + 18, 50, rust_orange);
+            DrawText(raw_text2.as_ptr(), w / 2 - 44, h / 2 + 48, 50, rust_orange);
             EndDrawing();
         }
         CloseWindow();
