@@ -145,7 +145,7 @@ impl Color {
         let raw = self.into_raw();
         unsafe { raw::ColorToInt(raw) as u32 }
     }
-    /// Returns color normalized as float [0..1]
+    /// Returns color normalized as [`0.0f32..1.0f32`]
     pub fn normalize(self) -> Vector4 {
         let raw = self.into_raw();
         unsafe { raw::ColorNormalize(raw) }
@@ -159,7 +159,7 @@ impl Color {
     pub fn from_int(value: u32) -> Color {
         Color::from_raw(unsafe { raw::GetColor(value as c_int) })
     }
-    /// Color fade-in or fade-out, alpha goes from 0.0f to 1.0f
+    /// Color fade-in or fade-out, alpha goes from `0.0f32` to `1.0f32`
     pub fn fade(self, alpha: f32) -> Color {
         let raw = self.into_raw();
         Color::from_raw(unsafe { raw::Fade(raw, alpha) })

@@ -142,7 +142,7 @@ pub fn end_texture_mode() {
 // pub fn get_mouse_ray(mouse_position: Vector2, camera: Camera) -> Ray {
 //     unsafe { raw::GetMouseRay(mouse_position, camera) }
 // }
-// /// Returns the screen space position for a 3d world space position
+// /// Returns the screen space position for a 3D world space position
 // pub fn get_world_to_screen(position: Vector3, camera: Camera) -> Vector2 {
 //     unsafe { raw::GetWorldToScreen(position, camera) }
 // }
