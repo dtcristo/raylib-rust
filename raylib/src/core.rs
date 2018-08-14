@@ -199,9 +199,9 @@ pub fn trace_log(log_type: LogType, text: &str) {
 /// Takes a screenshot of current screen (saved a .png)
 pub fn take_screenshot(file_name: &str) {
     let raw_file_name = CString::new(file_name).unwrap();
-    unsafe { raw::TakeScreenshot(raw_file_name) }
+    unsafe { raw::TakeScreenshot(raw_file_name.as_ptr()) }
 }
 /// Returns a random value between min and max (both included)
-pub fn get_random_value(min: i32, max: i32) {
+pub fn get_random_value(min: i32, max: i32) -> i32 {
     unsafe { raw::GetRandomValue(min, max) }
 }
