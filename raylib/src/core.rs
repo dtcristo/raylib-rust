@@ -46,11 +46,11 @@ pub fn set_window_title(title: &str) {
 pub fn set_window_position(x: i32, y: i32) {
     unsafe { raw::SetWindowPosition(x, y) }
 }
-/// Set monitor for the current window (fullscreen mode)
+/// Set monitor for the current window (for [`ConfigFlags::FullscreenMode`](../enum.ConfigFlag.html#variant.FullscreenMode))
 pub fn set_window_monitor(monitor: i32) {
     unsafe { raw::SetWindowMonitor(monitor) }
 }
-/// Set window minimum dimensions (for [`ConfigFlags::WINDOW_RESIZABLE`](../struct.ConfigFlags.html#associatedconstant.WINDOW_RESIZABLE))
+/// Set window minimum dimensions (for [`ConfigFlags::WindowResizable`](../enum.ConfigFlag.html#variant.WindowResizable))
 pub fn set_window_min_size(width: i32, height: i32) {
     unsafe { raw::SetWindowMinSize(width, height) }
 }
