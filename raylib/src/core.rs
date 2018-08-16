@@ -1,7 +1,7 @@
 use std::ffi::CString;
 use std::os::raw::{c_int, c_uchar};
 
-use {raw, Color, ConfigFlags, Image, LogType};
+use {raw, BitFlags, Color, ConfigFlag, Image, LogType};
 
 //------------------------------------------------------------------------------
 // Window-related functions
@@ -180,19 +180,20 @@ pub fn get_time() -> f64 {
 pub fn show_logo() {
     unsafe { raw::ShowLogo() }
 }
-/// Setup window configuration flags (view [`ConfigFlags`](../struct.ConfigFlags.html))
-pub fn set_config_flags(flags: ConfigFlags) {
+/// Setup window configuration flags
+pub fn set_config_flags(flags: BitFlags<ConfigFlag>) {
     let raw_flags = flags.bits() as c_uchar;
     unsafe { raw::SetConfigFlags(raw_flags) }
 }
-/// Enable trace log message types (view [`LogType`](../struct.LogType.html))
-pub fn set_trace_log(log_types: LogType) {
+/// Enable trace log message types
+pub fn set_trace_log(log_types: BitFlags<LogType>) {
     let raw_log_types = log_types.bits() as c_uchar;
     unsafe { raw::SetTraceLog(raw_log_types) }
 }
-/// Show trace log messages (one of [`LogType`](../struct.LogType.html))
+// TODO: Allow this to accept multiple text messages at once
+/// Show trace log message
 pub fn trace_log(log_type: LogType, text: &str) {
-    let raw_log_type = log_type.bits() as c_int;
+    let raw_log_type = log_type as c_int;
     let raw_text = CString::new(text).unwrap();
     unsafe { raw::TraceLog(raw_log_type, raw_text.as_ptr()) }
 }

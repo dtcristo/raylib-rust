@@ -1,39 +1,38 @@
 use std::os::raw::{c_int, c_uint};
 
-use {raw, Vector2};
+use num_traits::FromPrimitive;
 
-bitflags! {
-    /// Gesture type
-    ///
-    /// NOTE: It could be used as flags to enable only some gestures
-    pub struct Gesture: u32 {
-        const NONE = raw::Gestures::GESTURE_NONE;
-        const TAP = raw::Gestures::GESTURE_TAP;
-        const DOUBLETAP = raw::Gestures::GESTURE_DOUBLETAP;
-        const HOLD = raw::Gestures::GESTURE_HOLD;
-        const DRAG = raw::Gestures::GESTURE_DRAG;
-        const SWIPE_RIGHT = raw::Gestures::GESTURE_SWIPE_RIGHT;
-        const SWIPE_LEFT = raw::Gestures::GESTURE_SWIPE_LEFT;
-        const SWIPE_UP = raw::Gestures::GESTURE_SWIPE_UP;
-        const SWIPE_DOWN = raw::Gestures::GESTURE_SWIPE_DOWN;
-        const PINCH_IN = raw::Gestures::GESTURE_PINCH_IN;
-        const PINCH_OUT = raw::Gestures::GESTURE_PINCH_OUT;
-    }
+use {raw, BitFlags, Vector2};
+
+/// Gesture types
+#[repr(u32)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, EnumFlags, FromPrimitive)]
+pub enum Gesture {
+    Tap = 1,         // raw::Gestures::GESTURE_TAP
+    DoubleTap = 2,   // raw::Gestures::GESTURE_DOUBLETAP
+    Hold = 4,        // raw::Gestures::GESTURE_HOLD
+    Drag = 8,        // raw::Gestures::GESTURE_DRAG
+    SwipeRight = 16, // raw::Gestures::GESTURE_SWIPE_RIGHT
+    SwipeLeft = 32,  // raw::Gestures::GESTURE_SWIPE_LEFT
+    SwipeUp = 64,    // raw::Gestures::GESTURE_SWIPE_UP
+    SwipeDown = 128, // raw::Gestures::GESTURE_SWIPE_DOWN
+    PinchIn = 256,   // raw::Gestures::GESTURE_PINCH_IN
+    PinchOut = 512,  // raw::Gestures::GESTURE_PINCH_OUT
 }
 
 /// Enable a set of gestures
-pub fn set_gestures_enabled(gesture_flags: Gesture) {
+pub fn set_gestures_enabled(gesture_flags: BitFlags<Gesture>) {
     let raw_gesture_flags = gesture_flags.bits() as c_uint;
     unsafe { raw::SetGesturesEnabled(raw_gesture_flags) }
 }
 /// Check if a gesture has been detected
 pub fn is_gesture_detected(gesture: Gesture) -> bool {
-    let raw_gesture = gesture.bits() as c_int;
+    let raw_gesture = gesture as c_int;
     unsafe { raw::IsGestureDetected(raw_gesture) == raw::bool_::true_ }
 }
 /// Get latest detected gesture
-pub fn get_gesture_detected() -> Gesture {
-    Gesture::from_bits_truncate(unsafe { raw::GetGestureDetected() as u32 })
+pub fn get_gesture_detected() -> Option<Gesture> {
+    Gesture::from_i32(unsafe { raw::GetGestureDetected() })
 }
 /// Get touch points count
 pub fn get_touch_points_count() -> i32 {

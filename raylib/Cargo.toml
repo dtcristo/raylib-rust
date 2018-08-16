@@ -8,7 +8,8 @@ description = "Bindings for raylib, a simple and easy-to-use library to learn vi
 categories = ["game-engines", "api-bindings"]
 
 [dependencies]
-bitflags = "1.0"
+enumflags = "0.4.1"
+enumflags_derive = "0.4.1"
 num-traits = "0.2"
 num-derive = "0.2"
 raylib-sys = { path = "../raylib-sys" }
