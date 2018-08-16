@@ -1,3 +1,8 @@
+#![doc(
+    html_logo_url = "https://github.com/dtcristo/raylib-rust/raw/master/logo/raylib-rust_256x256.png",
+    html_favicon_url = "https://github.com/dtcristo/raylib-rust/raw/master/logo/raylib-rust.ico"
+)]
+
 extern crate enumflags;
 #[macro_use]
 extern crate enumflags_derive;
