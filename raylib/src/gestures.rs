@@ -1,3 +1,5 @@
+//! Gestures and Touch Handling Functions
+
 use std::os::raw::{c_int, c_uint};
 
 use num_traits::FromPrimitive;

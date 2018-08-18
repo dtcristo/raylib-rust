@@ -1,3 +1,5 @@
+//! Custom raylib color palette for amazing visuals
+
 use Color;
 
 /// Light Gray

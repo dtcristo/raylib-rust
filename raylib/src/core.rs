@@ -1,3 +1,5 @@
+//! Window, Graphics Device and Input Handling Functions
+
 use std::ffi::CString;
 use std::os::raw::{c_int, c_uchar};
 

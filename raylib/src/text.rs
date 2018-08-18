@@ -1,3 +1,5 @@
+//! Font Loading and Text Drawing Functions
+
 use std::ffi::CString;
 
 use {raw, Color};

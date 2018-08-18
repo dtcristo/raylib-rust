@@ -14,34 +14,28 @@ extern crate raylib_sys as raw;
 
 use std::os::raw::{c_int, c_void};
 
-pub use enumflags::BitFlags;
 use num_traits::FromPrimitive;
+
+//------------------------------------------------------------------------------
+// Re-exports
+//------------------------------------------------------------------------------
+
+#[doc(no_inline)]
+pub use enumflags::BitFlags;
 
 //------------------------------------------------------------------------------
 // Modules
 //------------------------------------------------------------------------------
 
-/// Audio Loading and Playing Functions
 pub mod audio;
-/// Camera System Functions
 pub mod camera;
-/// Custom raylib color palette for amazing visuals
 pub mod colors;
-/// Window, Graphics Device and Input Handling Functions
 pub mod core;
-/// Gestures and Touch Handling Functions
 pub mod gestures;
-/// Basic 3D Shape and 3D Model Loading and Drawing Functions
 pub mod models;
-/// Shaders System Functions
-///
-/// NOTE: This functions are useless when using OpenGL 1.1
 pub mod shaders;
-/// Basic Shape Drawing Functions
 pub mod shapes;
-/// Font Loading and Text Drawing Functions
 pub mod text;
-/// Texture Loading and Drawing Functions
 pub mod textures;
 
 //------------------------------------------------------------------------------
