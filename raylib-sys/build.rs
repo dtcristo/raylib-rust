@@ -1,4 +1,5 @@
 extern crate bindgen;
+extern crate pkg_config;
 
 use std::env;
 use std::path::PathBuf;
@@ -43,20 +44,14 @@ fn main() {
         .write_to_file(out_dir.join("bindings.rs"))
         .expect("Failed to write bindings.");
 
-    // Search lib directory containing libraylib.a and statically link to it
-    println!(
-        "cargo:rustc-link-search=native={}",
-        out_dir.join("lib").display()
-    );
-    println!("cargo:rustc-link-lib=static=raylib");
-
-    // Dynamically link to raylib dependencies
-    println!("cargo:rustc-link-lib=pthread");
-    println!("cargo:rustc-link-lib=m");
-    println!("cargo:rustc-link-lib=dl");
-    println!("cargo:rustc-link-lib=rt");
-    println!("cargo:rustc-link-lib=GL");
-    println!("cargo:rustc-link-lib=X11");
+    // Read raylib.pc and print cargo metadata for linking to raylib
+    env::set_var("PKG_CONFIG_PATH", out_dir.join("lib/pkgconfig"));
+    pkg_config::Config::new()
+        .atleast_version(raylib_version)
+        .statik(true)
+        .arg(format!("--define-variable=prefix={}", out_dir.display()))
+        .probe("raylib")
+        .unwrap();
 }
 
 fn release_suffix_for_target(target: &str) -> String {

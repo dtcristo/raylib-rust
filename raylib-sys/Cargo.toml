@@ -13,3 +13,4 @@ build = "build.rs"
 
 [build-dependencies]
 bindgen = "0.37.4"
+pkg-config = "0.3.13"
