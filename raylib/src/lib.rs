@@ -256,6 +256,6 @@ pub enum PixelFormat {
 }
 impl PixelFormat {
     fn from_raw(raw: c_int) -> PixelFormat {
-        PixelFormat::from_i32(raw).expect(&format!("Invalid PixelFormat value `{}`.", raw))
+        PixelFormat::from_i32(raw).expect(&format!("Invalid PixelFormat value `{}`", raw))
     }
 }

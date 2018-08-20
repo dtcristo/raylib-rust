@@ -23,16 +23,16 @@ fn main() {
         .current_dir(&out_dir)
         .args(&["-sSfLo", "raylib.tar.gz", &raylib_release_url])
         .status()
-        .expect("Failed to execute curl.")
-        .success() || panic!("Failed to download compiled raylib.");
+        .expect("Failed to execute `curl`")
+        .success() || panic!("Failed to download compiled raylib");
 
     // Untar raylib binary release
     let _ = Command::new("tar")
         .current_dir(&out_dir)
         .args(&["-xzf", "raylib.tar.gz", "--strip-components=1"])
         .status()
-        .expect("Failed to execute tar.")
-        .success() || panic!("Failed to untar compiled raylib.");
+        .expect("Failed to execute `tar`")
+        .success() || panic!("Failed to untar compiled raylib");
 
     // Generate and write raylib bindings
     bindgen::Builder::default()
@@ -40,9 +40,9 @@ fn main() {
         .clang_arg(format!("-I{}", out_dir.join("include").display()))
         .constified_enum_module("*")
         .generate()
-        .expect("Failed to generate bindings.")
+        .expect("Failed to generate bindings")
         .write_to_file(out_dir.join("bindings.rs"))
-        .expect("Failed to write bindings.");
+        .expect("Failed to write bindings");
 
     // Read raylib.pc and print cargo metadata for linking to raylib
     env::set_var("PKG_CONFIG_PATH", out_dir.join("lib/pkgconfig"));
@@ -57,7 +57,7 @@ fn main() {
 fn release_suffix_for_target(target: &str) -> String {
     // TODO: Remove this when other platforms are supported and tested
     if !target.contains("linux") {
-        panic!("Unsupported target `{}`.", target);
+        panic!("Unsupported target `{}`", target);
     }
     if target.contains("apple") {
         return String::from("macOS.tar.gz");
@@ -79,5 +79,5 @@ fn release_suffix_for_target(target: &str) -> String {
             return format!("{}-msvc15.zip", arch);
         }
     }
-    panic!("Unsupported target `{}`.", target);
+    panic!("Unsupported target `{}`", target);
 }
