@@ -208,3 +208,15 @@ pub fn take_screenshot(file_name: &str) {
 pub fn get_random_value(min: i32, max: i32) -> i32 {
     unsafe { raw::GetRandomValue(min, max) }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::get_random_value;
+
+    #[test]
+    fn call_random_function() {
+        let result = get_random_value(0, 10);
+        assert!(result >= 0);
+        assert!(result <= 10);
+    }
+}
