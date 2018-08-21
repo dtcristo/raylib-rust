@@ -4,6 +4,32 @@
 
 Rust bindings for [raylib](http://www.raylib.com/), a simple and easy-to-use library to learn videogames programming.
 
+## Dependencies
+
+The following tools are required to build `raylib-sys`:
+
+- `curl`
+- `pkg-config`
+
+## Supported targets
+
+The following targets are tested to work:
+
+- `x86_64-apple-darwin`
+- `x86_64-unknown-linux-gnu`
+
+However, it *should* also work on the following:
+
+- `i686-apple-darwin`
+- `i686-unknown-linux-gnu`
+
+Future support will be added for the following:
+
+- `i686-pc-windows-gnu`
+- `i686-pc-windows-msvc`
+- `x86_64-pc-windows-gnu`
+- `x86_64-pc-windows-msvc`
+
 ## License
 
 Licensed under either of
