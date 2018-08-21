@@ -34,6 +34,21 @@ fn main() {
         .expect("Failed to execute `tar`")
         .success() || panic!("Failed to untar compiled raylib");
 
+    if target.contains("darwin") {
+        // Trim macOS static library
+        let arch = if target.contains("x86_64") {
+            "x86_64"
+        } else {
+            "i386"
+        };
+        let _ = Command::new("lipo")
+            .current_dir(out_dir.join("lib"))
+            .args(&["libraylib.a", "-thin", arch, "-output", "libraylib.a"])
+            .status()
+            .expect("Failed to execute `lipo`")
+            .success() || panic!("Failed to trim static library");
+    }
+
     // Generate and write raylib bindings
     bindgen::Builder::default()
         .header("wrapper.h")
@@ -55,11 +70,7 @@ fn main() {
 }
 
 fn release_suffix_for_target(target: &str) -> String {
-    // TODO: Remove this when other platforms are supported and tested
-    if !target.contains("linux") {
-        panic!("Unsupported target `{}`", target);
-    }
-    if target.contains("apple") {
+    if target.contains("darwin") {
         return String::from("macOS.tar.gz");
     } else if target.contains("linux") {
         if target.contains("x86_64") {
@@ -68,6 +79,8 @@ fn release_suffix_for_target(target: &str) -> String {
             return String::from("Linux-i386.tar.gz");
         }
     } else if target.contains("windows") {
+        // TODO: Remove once Windows has been tested
+        panic!("Unsupported target `{}`", target);
         let arch = if target.contains("x86_64") {
             "Win64"
         } else {
