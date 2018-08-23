@@ -10,8 +10,8 @@ use {raw, BitFlags, Color, ConfigFlag, Image, LogType};
 //------------------------------------------------------------------------------
 
 /// Initialize window and OpenGL context
-pub fn init_window(width: i32, height: i32, title: &str) {
-    let raw_title = CString::new(title).unwrap();
+pub fn init_window<S: Into<String>>(width: i32, height: i32, title: S) {
+    let raw_title = CString::new(title.into()).unwrap();
     unsafe { raw::InitWindow(width, height, raw_title.as_ptr()) }
 }
 /// Close window and unload OpenGL context
@@ -194,14 +194,14 @@ pub fn set_trace_log(log_types: BitFlags<LogType>) {
 }
 // TODO: Allow this to accept multiple text messages at once
 /// Show trace log message
-pub fn trace_log(log_type: LogType, text: &str) {
+pub fn trace_log<S: Into<String>>(log_type: LogType, text: S) {
     let raw_log_type = log_type as c_int;
-    let raw_text = CString::new(text).unwrap();
+    let raw_text = CString::new(text.into()).unwrap();
     unsafe { raw::TraceLog(raw_log_type, raw_text.as_ptr()) }
 }
 /// Takes a screenshot of current screen (saved a .png)
-pub fn take_screenshot(file_name: &str) {
-    let raw_file_name = CString::new(file_name).unwrap();
+pub fn take_screenshot<S: Into<String>>(file_name: S) {
+    let raw_file_name = CString::new(file_name.into()).unwrap();
     unsafe { raw::TakeScreenshot(raw_file_name.as_ptr()) }
 }
 /// Returns a random value between min and max (both included)
