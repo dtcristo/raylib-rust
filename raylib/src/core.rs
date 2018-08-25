@@ -1,7 +1,8 @@
 //! Window, Graphics Device and Input Handling Functions
 
-use std::ffi::CString;
+use std::ffi::{CStr, CString};
 use std::os::raw::{c_int, c_uchar};
+use std::slice;
 
 use {raw, BitFlags, Color, ConfigFlag, Image, LogType};
 
@@ -40,8 +41,8 @@ pub fn set_window_icon(image: Image) {
     unsafe { raw::SetWindowIcon(raw_image) }
 }
 /// Set title for window (only PLATFORM_DESKTOP)
-pub fn set_window_title(title: &str) {
-    let raw_title = CString::new(title).unwrap();
+pub fn set_window_title<S: Into<String>>(title: S) {
+    let raw_title = CString::new(title.into()).unwrap();
     unsafe { raw::SetWindowTitle(raw_title.as_ptr()) }
 }
 /// Set window position on screen (only PLATFORM_DESKTOP)
@@ -213,10 +214,94 @@ pub fn get_random_value(min: i32, max: i32) -> i32 {
 mod tests {
     use super::get_random_value;
 
+    use super::get_extension;
+
     #[test]
     fn call_random_function() {
         let result = get_random_value(0, 10);
         assert!(result >= 0);
         assert!(result <= 10);
     }
+
+    #[test]
+    fn test_get_extension() {
+        let result = get_extension("README.md");
+        assert_eq!("md", result);
+    }
+}
+
+//------------------------------------------------------------------------------
+// Files management functions
+//------------------------------------------------------------------------------
+
+/// Check file extension
+pub fn is_file_extension<S: Into<String>, T: Into<String>>(file_name: S, ext: T) -> bool {
+    let raw_file_name = CString::new(file_name.into()).unwrap();
+    let raw_ext = CString::new(ext.into()).unwrap();
+    unsafe { raw::IsFileExtension(raw_file_name.as_ptr(), raw_ext.as_ptr()) == raw::bool_::true_ }
+}
+
+/// Get extension for a file name string
+pub fn get_extension<S: Into<String>>(file_name: S) -> String {
+    let raw_file_name = CString::new(file_name.into()).unwrap();
+    let raw_ext = unsafe { CStr::from_ptr(raw::GetExtension(raw_file_name.as_ptr())) };
+    raw_ext.to_str().unwrap().to_string()
+}
+
+/// Get file name for a path string
+pub fn get_file_name<S: Into<String>>(file_path: S) -> String {
+    let raw_file_path = CString::new(file_path.into()).unwrap();
+    let raw_file_name = unsafe { CStr::from_ptr(raw::GetFileName(raw_file_path.as_ptr())) };
+    raw_file_name.to_str().unwrap().to_string()
+}
+
+/// Get directory for a given path string
+pub fn get_directory_path<S: Into<String>>(file_path: S) -> String {
+    let raw_file_path = CString::new(file_path.into()).unwrap();
+    let raw_directory_path =
+        unsafe { CStr::from_ptr(raw::GetDirectoryPath(raw_file_path.as_ptr())) };
+    raw_directory_path.to_str().unwrap().to_string()
+}
+
+/// Get current working directory
+pub fn get_working_directory() -> String {
+    let raw_working_directory = unsafe { CStr::from_ptr(raw::GetWorkingDirectory()) };
+    raw_working_directory.to_str().unwrap().to_string()
+}
+
+/// Change working directory
+pub fn change_directory<S: Into<String>>(dir: S) -> Result<(), ()> {
+    let raw_dir = CString::new(dir.into()).unwrap();
+    let result = unsafe { raw::ChangeDirectory(raw_dir.as_ptr()) == raw::bool_::true_ };
+    match result {
+        true => Ok(()),
+        false => Err(()),
+    }
+}
+
+/// Check if a file has been dropped into window
+pub fn is_file_dropped() -> bool {
+    unsafe { raw::IsFileDropped() == raw::bool_::true_ }
+}
+
+/// Get dropped files' paths
+pub fn get_dropped_files() -> Vec<String> {
+    let mut count: c_int = 0;
+    let raw_paths_array_ptr = unsafe { raw::GetDroppedFiles(&mut count) };
+    if raw_paths_array_ptr.is_null() {
+        return vec![];
+    }
+    let raw_paths_slice = unsafe { slice::from_raw_parts(raw_paths_array_ptr, count as usize) };
+    raw_paths_slice
+        .iter()
+        .map(|raw_str_ptr| {
+            let raw_path = unsafe { CStr::from_ptr(*raw_str_ptr) };
+            raw_path.to_str().unwrap().to_string()
+        })
+        .collect()
+}
+
+/// Clear dropped files' paths buffer
+pub fn clear_dropped_files() {
+    unsafe { raw::ClearDroppedFiles() }
 }
