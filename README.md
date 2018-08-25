@@ -4,6 +4,10 @@
 
 Rust bindings for [raylib](http://www.raylib.com/), a simple and easy-to-use library to learn videogames programming.
 
+## Development status
+
+The raw binding layer `raylib-sys` is fucntionally complete with an automatic build script tested on Linux and macOS, this downloads raylib binaries and statically links your project. The higher level `raylib` crate is still under active development and currently incomplete.
+
 ## Dependencies
 
 The following tools are required to build `raylib-sys`:
@@ -18,7 +22,7 @@ The following targets are tested to work:
 - `x86_64-apple-darwin`
 - `x86_64-unknown-linux-gnu`
 
-However, it *should* also work on the following:
+However, it _should_ also work on the following:
 
 - `i686-apple-darwin`
 - `i686-unknown-linux-gnu`
