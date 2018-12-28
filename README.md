@@ -6,33 +6,34 @@ Rust bindings for [raylib](http://www.raylib.com/), a simple and easy-to-use lib
 
 ## Development status
 
-The raw binding layer `raylib-sys` is fucntionally complete with an automatic build script tested on Linux and macOS, this downloads raylib binaries and statically links your project. The higher level `raylib` crate is still under active development and currently incomplete.
+The raw binding layer `raylib-sys` is fucntionally complete with an automatic build script tested on macOS, Windows and Linux. This downloads raylib binaries and statically links your project. The higher level `raylib` crate is still under active development and currently incomplete.
 
 ## Dependencies
 
 The following tools are required to build `raylib-sys`:
 
 - `curl`
-- `pkg-config`
+- `clang` - Windows binaries can be downloaded [here](https://releases.llvm.org/download.html)
+- `pkg-config` - Only required for macOS and Linux
 
 ## Supported targets
 
 The following targets are tested to work:
 
 - `x86_64-apple-darwin`
+- `x86_64-pc-windows-msvc`
 - `x86_64-unknown-linux-gnu`
 
 However, it _should_ also work on the following:
 
 - `i686-apple-darwin`
+- `i686-pc-windows-msvc`
 - `i686-unknown-linux-gnu`
 
 Future support will be added for the following:
 
 - `i686-pc-windows-gnu`
-- `i686-pc-windows-msvc`
 - `x86_64-pc-windows-gnu`
-- `x86_64-pc-windows-msvc`
 
 ## License
 

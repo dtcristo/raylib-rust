@@ -34,8 +34,8 @@ fn main() {
         .expect("Failed to execute `tar`")
         .success() || panic!("Failed to untar compiled raylib");
 
+    // Trim macOS static library
     if target.contains("darwin") {
-        // Trim macOS static library
         let arch = if target.contains("x86_64") {
             "x86_64"
         } else {
@@ -59,14 +59,22 @@ fn main() {
         .write_to_file(out_dir.join("bindings.rs"))
         .expect("Failed to write bindings");
 
-    // Read raylib.pc and print cargo metadata for linking to raylib
-    env::set_var("PKG_CONFIG_PATH", out_dir.join("lib/pkgconfig"));
-    pkg_config::Config::new()
-        .atleast_version(raylib_version)
-        .statik(true)
-        .arg(format!("--define-variable=prefix={}", out_dir.display()))
-        .probe("raylib")
-        .unwrap();
+    // Generate cargo metadata for linking to raylib
+    if target.contains("windows") {
+        println!("cargo:rustc-link-search=native={}", out_dir.join("lib").display());
+        println!("cargo:rustc-link-lib=static=raylib");
+        println!("cargo:rustc-link-lib=gdi32");
+        println!("cargo:rustc-link-lib=user32");
+    } else {
+        // On other platforms read raylib.pc with pkg-config
+        env::set_var("PKG_CONFIG_PATH", out_dir.join("lib/pkgconfig"));
+        pkg_config::Config::new()
+            .atleast_version(raylib_version)
+            .statik(true)
+            .arg(format!("--define-variable=prefix={}", out_dir.display()))
+            .probe("raylib")
+            .unwrap();
+    }
 }
 
 fn release_suffix_for_target(target: &str) -> String {
@@ -79,18 +87,16 @@ fn release_suffix_for_target(target: &str) -> String {
             return String::from("Linux-i386.tar.gz");
         }
     } else if target.contains("windows") {
-        // TODO: Remove once Windows has been tested
-        panic!("Unsupported target `{}`", target);
         let arch = if target.contains("x86_64") {
             "Win64"
         } else {
             "Win32"
         };
-        if target.contains("gnu") {
-            return format!("{}-mingw.zip", arch);
-        } else if target.contains("msvc") {
+        if target.contains("msvc") {
             return format!("{}-msvc15.zip", arch);
-        }
+        }// else if target.contains("gnu") {
+        //     return format!("{}-mingw.zip", arch);
+        // }
     }
     panic!("Unsupported target `{}`", target);
 }
