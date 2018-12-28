@@ -4,7 +4,7 @@ use std::ffi::{CStr, CString};
 use std::os::raw::{c_int, c_uchar};
 use std::slice;
 
-use {raw, BitFlags, Color, ConfigFlag, Image, LogType};
+use crate::{raw, BitFlags, Color, ConfigFlag, Image, LogType};
 
 //------------------------------------------------------------------------------
 // Window-related functions

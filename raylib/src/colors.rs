@@ -1,6 +1,6 @@
 //! Custom raylib color palette for amazing visuals
 
-use Color;
+use crate::Color;
 
 /// Light Gray
 pub const LIGHTGRAY: Color = Color {

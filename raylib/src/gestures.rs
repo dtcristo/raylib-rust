@@ -4,7 +4,7 @@ use std::os::raw::{c_int, c_uint};
 
 use num_traits::FromPrimitive;
 
-use {raw, BitFlags, Vector2};
+use crate::{raw, BitFlags, Vector2};
 
 /// Gesture types
 #[repr(u32)]

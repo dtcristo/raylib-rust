@@ -2,7 +2,7 @@
 
 use std::ffi::CString;
 
-use {raw, Color};
+use crate::{raw, Color};
 
 //------------------------------------------------------------------------------
 // Text drawing functions

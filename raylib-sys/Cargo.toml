@@ -8,6 +8,7 @@ description = "Raw bindings for raylib, a simple and easy-to-use library to lear
 categories = ["game-engines", "external-ffi-bindings"]
 links = "raylib"
 build = "build.rs"
+edition = "2018"
 
 [dependencies]
 
