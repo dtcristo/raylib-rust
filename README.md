@@ -8,7 +8,7 @@ Rust bindings for [raylib](http://www.raylib.com/), a simple and easy-to-use lib
 
 **DEPRECATED: Please use the more feature-complete bindings [deltaphc/raylib-rs](https://github.com/deltaphc/raylib-rs) instead.**
 
-The raw binding layer `raylib-sys` is fucntionally complete with an automatic build script tested on macOS, Windows and Linux. This downloads raylib binaries and statically links your project. The higher level `raylib` crate is incomplete.
+The raw binding layer `raylib-sys` is functionally complete with an automatic build script tested on macOS, Windows and Linux. This downloads raylib binaries and statically links your project. The higher level `raylib` crate is incomplete.
 
 ## Dependencies
 
